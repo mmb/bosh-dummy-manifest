@@ -10,6 +10,7 @@ type manifest struct {
 	Update       update            `json:"update"`
 	Networks     []network         `json:"networks"`
 	Properties   map[string]string `json:"properties"`
+	Jobs         []job             `json:"jobs"`
 }
 
 type release struct {
@@ -55,6 +56,18 @@ type networkCloudProperties struct {
 	Name string `json:"name"`
 }
 
+type job struct {
+	Name         string       `json:"name"`
+	Template     string       `json:"template"`
+	Instances    int          `json:"instances"`
+	ResourcePool string       `json:"resource_pool"`
+	Networks     []jobNetwork `json:"networks"`
+}
+
+type jobNetwork struct {
+	Name string `json:"name"`
+}
+
 func Build(input InputFields) (output string, err error) {
 	release := release{"dummy", "latest"}
 	cloudProperties := cloudProperties{512, 1024, 1}
@@ -76,6 +89,10 @@ func Build(input InputFields) (output string, err error) {
 
 	networks := []network{{"default", subnets}}
 
+	jobs := []job{
+		{"dummy", "dummy", 1, "default", []jobNetwork{{"default"}}},
+	}
+
 	manifest := manifest{
 		"dummy",
 		input.DirectorUuid,
@@ -84,6 +101,7 @@ func Build(input InputFields) (output string, err error) {
 		update,
 		networks,
 		make(map[string]string),
+		jobs,
 	}
 
 	var bytes []byte
