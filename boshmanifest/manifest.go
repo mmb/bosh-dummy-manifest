@@ -44,19 +44,6 @@ type network struct {
 	Subnets []subnet `json:"subnets"`
 }
 
-type subnet struct {
-	Range           string                 `json:"range"`
-	Reserved        []string               `json:"reserved"`
-	Static          []string               `json:"static"`
-	Gateway         string                 `json:"gateway"`
-	Dns             []string               `json:"dns"`
-	CloudProperties networkCloudProperties `json:"cloud_properties"`
-}
-
-type networkCloudProperties struct {
-	Name string `json:"name"`
-}
-
 type resourcePool struct {
 	Name            string          `json:"name"`
 	Network         string          `json:"network"`
@@ -87,19 +74,12 @@ func Build(input InputFields) (output string, err error) {
 	cloudProperties := cloudProperties{512, 1024, 1}
 	compilation := compilation{1, "default", cloudProperties}
 	update := update{1, "3000-90000", "3000-90000", 4, 1}
-	reserved := []string{"192.168.0.2 - 192.168.0.10"}
-	static := []string{"192.168.0.11"}
-	dns := []string{"8.8.8.8"}
-	networkCloudProperties := networkCloudProperties{"VM Network"}
 
-	subnets := []subnet{{
-		"192.68.0.1/24",
-		reserved,
-		static,
-		"192.168.0.1",
-		dns,
-		networkCloudProperties,
-	}}
+	subnet1, err := newSubnet(input.Cidr, []string{"8.8.8.8"}, "VM Network")
+	if err != nil {
+		return
+	}
+	subnets := []subnet{*subnet1}
 
 	networks := []network{{"default", subnets}}
 

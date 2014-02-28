@@ -12,6 +12,7 @@ func main() {
 	input := boshmanifest.InputFields{}
 
 	flag.StringVar(&input.DirectorUuid, "uuid", "bada55", "BOSH director UUID")
+	flag.StringVar(&input.Cidr, "cidr", "192.168.0.0/24", "network CIDR")
 
 	flag.Parse()
 
