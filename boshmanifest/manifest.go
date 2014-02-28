@@ -3,12 +3,13 @@ package boshmanifest
 import "encoding/json"
 
 type manifest struct {
-	Name         string      `json:"name"`
-	DirectorUuid string      `json:"director_uuid"`
-	Release      release     `json:"release"`
-	Compilation  compilation `json:"compilation"`
-	Update       update      `json:"update"`
-	Networks     []network   `json:"networks"`
+	Name         string            `json:"name"`
+	DirectorUuid string            `json:"director_uuid"`
+	Release      release           `json:"release"`
+	Compilation  compilation       `json:"compilation"`
+	Update       update            `json:"update"`
+	Networks     []network         `json:"networks"`
+	Properties   map[string]string `json:"properties"`
 }
 
 type release struct {
@@ -82,6 +83,7 @@ func Build(input InputFields) (output string, err error) {
 		compilation,
 		update,
 		networks,
+		make(map[string]string),
 	}
 
 	var bytes []byte
