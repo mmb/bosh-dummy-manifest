@@ -13,6 +13,8 @@ func main() {
 
 	flag.StringVar(&input.DirectorUuid, "uuid", "bada55", "BOSH director UUID")
 
+	flag.Parse()
+
 	output, err := boshmanifest.Build(input)
 	if err != nil {
 		log.Fatal(err)
