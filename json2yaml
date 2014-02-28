@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ruby -r yaml -e "puts YAML.dump(YAML.load(STDIN))"
