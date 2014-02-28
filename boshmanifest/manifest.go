@@ -90,7 +90,7 @@ func Build(input InputFields) (output string, err error) {
 	reserved := []string{"192.168.0.2 - 192.168.0.10"}
 	static := []string{"192.168.0.11"}
 	dns := []string{"8.8.8.8"}
-	networkCloudProperties := networkCloudProperties{"default"}
+	networkCloudProperties := networkCloudProperties{"VM Network"}
 
 	subnets := []subnet{{
 		"192.68.0.1/24",
