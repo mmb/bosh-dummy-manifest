@@ -3,14 +3,15 @@ package boshmanifest
 import "encoding/json"
 
 type manifest struct {
-	Name         string            `json:"name"`
-	DirectorUuid string            `json:"director_uuid"`
-	Release      release           `json:"release"`
-	Compilation  compilation       `json:"compilation"`
-	Update       update            `json:"update"`
-	Networks     []network         `json:"networks"`
-	Properties   map[string]string `json:"properties"`
-	Jobs         []job             `json:"jobs"`
+	Name          string            `json:"name"`
+	DirectorUuid  string            `json:"director_uuid"`
+	Release       release           `json:"release"`
+	Compilation   compilation       `json:"compilation"`
+	Update        update            `json:"update"`
+	Networks      []network         `json:"networks"`
+	Properties    map[string]string `json:"properties"`
+	ResourcePools []resourcePool    `json:"resource_pools"`
+	Jobs          []job             `json:"jobs"`
 }
 
 type release struct {
@@ -56,6 +57,19 @@ type networkCloudProperties struct {
 	Name string `json:"name"`
 }
 
+type resourcePool struct {
+	Name            string          `json:"name"`
+	Network         string          `json:"network"`
+	Size            int             `json:"size"`
+	Stemcell        stemcell        `json:"stemcell"`
+	CloudProperties cloudProperties `json:"cloud_properties"`
+}
+
+type stemcell struct {
+	Name    string `json:"name"`
+	Version string `json:"version"`
+}
+
 type job struct {
 	Name         string       `json:"name"`
 	Template     string       `json:"template"`
@@ -89,6 +103,16 @@ func Build(input InputFields) (output string, err error) {
 
 	networks := []network{{"default", subnets}}
 
+	stemcell := stemcell{"bosh-vsphere-esxi-ubuntu", "latest"}
+
+	resourcePools := []resourcePool{{
+		"default",
+		"default",
+		1,
+		stemcell,
+		cloudProperties,
+	}}
+
 	jobs := []job{
 		{"dummy", "dummy", 1, "default", []jobNetwork{{"default"}}},
 	}
@@ -101,6 +125,7 @@ func Build(input InputFields) (output string, err error) {
 		update,
 		networks,
 		make(map[string]string),
+		resourcePools,
 		jobs,
 	}
 
